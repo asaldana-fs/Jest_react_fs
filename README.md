@@ -1,7 +1,21 @@
-# Getting Started with Create React App
+# Technologies use in this project:
+React 18.2.0v
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Node 16.16.0v
 
+Npm 8.15.0v
+
+Jest 28.1.3v
+
+# Getting Started with this project
+
+## Quick Overview with React
+
+```sh
+npx create-react-app demo-test-fs
+cd demo-test-fs
+```
+If you've previously installed `create-react-app` globally via `npm install -g create-react-app`, we recommend you uninstall the package using `npm uninstall -g create-react-app` or `yarn global remove create-react-app` to ensure that npx always uses the latest version.
 ## Available Scripts
 
 In the project directory, you can run:
@@ -19,52 +33,155 @@ You may also see any lint errors in the console.
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+# Jest document:
+## Quick Overview with Jest.js
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+[Jest doc](https://jestjs.io/docs/getting-started) 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Install Jest using your favorite package manager:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```sh
+npm install --save-dev jest
+```
+# Create and delete files
+Create file `componente` and `test`.
 
-### `npm run eject`
+It is recommended that for each component a test of this is created.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+For example:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## component:
+```
+login.js
+demo.js
+```
+## test:
+```
+login.test.js
+demo.test.js
+```
+## Example in this project for FS:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+my-app
+├── README.md
+├── node_modules
+├── package.json
+├── .gitignore
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   └── manifest.json
+└── src
+     ├──components
+     │    └── demo.js
+     ├──test
+     │    └── demo.test.js
+     │
+     └── index.js
+```
+demo.js
+```javascript
+import React, { useState } from 'react'
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+const Form = ({name,email}) => {
+    const [newName, setSetName] = useState(name);
+    const [newEmail, setSetEmail] = useState(email);
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    
+  return (
+    <>
+      <form data-testid="form">
+        <p>Name</p><br/>
+        <input nombre={name} defaultValue= {newName}/><br/>
+        <p>Email</p><br/>
+        <input correo={email} defaultValue= {newEmail}/><br/>
+        <button type="submit">Submit</button>
+      </form>
+    </>
+  )
+}
 
-### Code Splitting
+export default Form;
+```
+demo.test.js
+```javascript
+import Form from "../components/demo";
+import {render,screen,fireEvent} from '@testing-library/react';
+//import userEvent from "@testing-library/user-event"; OTRO EVENTO DE CLICKS
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+describe('Demo description', () => { 
 
-### Analyzing the Bundle Size
+     it('Should render test', () => { 
+        render(<Form/>)
+     })
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+     it('Should rest api free with props', async() => { 
+        //https://gorest.co.in/public/v2/users API FREE consulte otro usuario si no esta disponible o si sale timeout
+        const url = await  fetch('https://gorest.co.in/public/v2/users/3559');
+        const data= await  url.json();
+        let inserName =  data.name;
+        let insertEmail = data.email;
+       render(<Form name= {inserName}email= {insertEmail}/>)
+       const buttonEl = screen.getByText(/Submit/i);   
+        fireEvent.submit(buttonEl);
+      })
 
-### Making a Progressive Web App
+      it('Should render unmount', () => { 
+        const {unmount} = render(<Form />)
+        unmount()
+      })
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+      it("Should click event button name", () => {
+       
+        render(<Form />);
+        const buttonEl = screen.getByText(/Submit/i);   
+        fireEvent.submit(buttonEl);
 
-### Advanced Configuration
+       
+      });
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+      it("Should search in the form name and email", () => {
+      render(<Form />);
+        expect(screen.getByText('Name'));  
+        expect(screen.getByText('Email'));  
 
-### Deployment
+        
+      });
+}) 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 🔴IMPORTANT🔴
+For each component that needs to be tested you need to export the function.
+
+Example:
+
+login.js
+```javascript
+export const user = () => {..,
+                            }
+export const password = () => {..,
+                                }
+...
+   ``` 
+login.test.js
+```javascript
+import {user,password} from "../components/demo";
+describe('Demo example', () => { 
+
+    it('Should render user', () => { 
+        render(<user/>)
+     })
+     it('Should render pass', () => { 
+        render(<password/>)
+     })
+     ....
+   ``` 
+
+
+
+
