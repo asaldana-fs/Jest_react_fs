@@ -181,7 +181,12 @@ describe('Demo example', () => {
      })
      ....
    ``` 
+## Run test:
+```sh
+npm run test
+```
 
+![img](https://i.ibb.co/7j99cJm/Test.png)
 
 
 
